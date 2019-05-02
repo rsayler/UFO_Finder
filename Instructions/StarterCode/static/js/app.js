@@ -1,89 +1,50 @@
 // from data.js
 var tableData = data;
 
-// YOUR CODE HERE!
+
+function handleSearch() {
+    // Prevent the page from refreshing
+        d3.event.preventDefault();
+        var dateSearch = d3.select("#filter-btn").node().value;
+        console.log(dateSearch);
+
+        // Create Table
+        createTable(dateSearch);
+    
+        // clear the input value
+        d3.select("#filter-btn").node().value = "";
+    
+    };
 
 // Pull tbody element, input fields, and buttons
-var $tbody = document.querySelector("tbody");
-var $dateInput = document.querySelector("#date");
-var $cityInput = document.querySelector("#city");
-var $stateInput = document.querySelector("#state");
-var $countryInput = document.querySelector("#country");
-var $shapeInput = document.querySelector("#shape");
-var $searchBtn = document.querySelector("#search");
-var $resetBtn = document.querySelector("#reset");
+var tbody = document.querySelector("tbody");
+var date = document.querySelector("#date");
+var city = document.querySelector("#city");
+var state = document.querySelector("#state");
+var country = document.querySelector("#country");
+var shape = document.querySelector("#shape");
+var searchButton = document.querySelector("#search");
+var resetButton = document.querySelector("#reset");
 
-
-
-// Create Table 
-function renderTable() {
-  $tbody.innerHTML = "";
-  for (var i = 0; i < tableData.length; i++) {
-    var sighting = tableData[i];
-    var fields = Object.keys(sighting);
-    var $row = $tbody.insertRow(i);
-
-    for (var j = 0; j < fields.length; j++) {
-      var field = fields[j];
-      var $cell = $row.insertCell(j);
-      $cell.innerText = sighting[field];
+function createTable() {
+    tbody.innerHTML = "";
+    for (var i = 0; i < tableData.length; i++) {
+        var sighting = tableData[i];
+        var fields = Object.keys(sighting);
+        var $row = tbody.insertRow(i);
+    
+        for (var j = 0; j < fields.length; j++) {
+        var field = fields[j];
+        var $cell = $row.insertCell(j);
+        $cell.innerText = sighting[field];
+        }
     }
-  }
-}
 
-function handleSearchButtonClick() {
-  var filterDate = $dateInput.value.trim();
-  if (filterDate != "") {
-    tableData = dataSet.filter(function (sighting) {
-      var sightingDate = sighting.datetime;
-      return sightingDate === filterDate;
-    });
-  };
-  var filterCity = $cityInput.value.trim().toLowerCase();
-  if (filterCity != "") {
-    tableData = tableData.filter(function (sighting) {
-      var sightingCity = sighting.city;
-      return sightingCity === filterCity;
-    });
-  };
-  var filterState = $stateInput.value.trim().toLowerCase();
-  if (filterState != "") {
-    tableData = tableData.filter(function (sighting) {
-      var sightingState = sighting.state;
-      return sightingState === filterState;
-    });
-  };
-  var filterCountry = $countryInput.value.trim().toLowerCase();
-  if (filterCountry != "") {
-    tableData = tableData.filter(function (sighting) {
-      var sightingCountry = sighting.country;
-      return sightingCountry === filterCountry;
-    });
-  };
-  var filterShape = $shapeInput.value.trim().toLowerCase();
-  if (filterShape != "") {
-    tableData = tableData.filter(function (sighting) {
-      var sightingShape = sighting.shape;
-      return sightingShape === filterShape;
-    });
-  };
-  renderTable();
-};
+    };
 
 
-// Reset the data and search form after a search
-function handleResetButtonClick() {
-  $dateInput.value = "";
-  $cityInput.value = "";
-  $stateInput.value = "";
-  $countryInput.value = "";
-  $shapeInput.value = "";
-  renderTable();
-}
-
-// Add an event listener to the searchButton and resetButton, call functions when clicked
-$searchBtn.addEventListener("click", handleSearchButtonClick);
-$resetBtn.addEventListener("click", handleResetButtonClick);
-
-// Render the table for initial page load
-renderTable();
+// Add event listener for submit button
+d3.select("#submit").on("click", handleSearch);
+//d3.event.preventDefault();
+// Create the table for initial page load
+createTable();
